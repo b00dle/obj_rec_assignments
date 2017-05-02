@@ -33,19 +33,23 @@ function image_evaluation(image_path)
   imshow(I_bw);
   %% TOWARDS DIFFERENT THRESHOLDS
   % - very low values ([0, 0.1]) tend to convert most features to white
+  %   color
   % - very high values ([0.9, 1.0]) convert most features to black color
   % - a mid ranged value ([0.45, 0.55]) shows a fairly evenly distributed 
   %   amount of black and white colors
-  % - Regardless of the threshold chosen, the multiple small features located in
-  %   the areas around the lake, seem to have a partially overlapping intensity
-  %   value range. Thus excluding coloring for these areas, while uniformly 
-  %   coloring the lake area is impossible using only linear black-white conversion
-  % - additionally we had to invert the resulting image mask to produce a result
-  %   comparable to the example shown in the exercise slides (see slide 18)
-  % - This is due to the fact that, for threshold values chosen to result the lake
-  %   in white color, most surrounding areas will be converted to white as well.
-  % - any approaches of using the graythresh function to automatically compute 
-  %   a threshold did not produce maximally useful masks
+  % - Regardless of the threshold chosen, the multiple small features
+  %   located in the areas around the lake, seem to have a partially 
+  %   overlapping intensity value range. Thus excluding coloring for these
+  %   areas, while uniformly coloring the lake area is impossible using 
+  %   only linear black-white conversion
+  % - additionally we had to invert the resulting image mask to produce a 
+  %   result comparable to the example shown in the exercise slides 
+  %   (see slide 18)
+  % - This is due to the fact that, for threshold values chosen to result
+  %   the lake in white color, most surrounding areas will be converted to
+  %   white as well.
+  % - any approaches of using the graythresh function to automatically 
+  %   compute a threshold did not produce maximally useful masks
   
   % sucessive opening and closing
   I_bw_mod = open_close_successive(I_bw, 3);
@@ -72,9 +76,9 @@ function image_evaluation(image_path)
   
   % !!!!!!!!
   % TODO:
-  % E. Discussion: Are the results satisfactory? What are the limitations of this
-  %    approach for separating background and foreground (code comments)?
-  % !!!!!!!!
+  % E. Discussion: Are the results satisfactory? What are the limitations
+  % of this approach for separating background and foreground 
+  % (code comments)?!!!!!!!!
   
 end
 
@@ -101,7 +105,8 @@ function new_image = stretch_contrast(image_src)
     % calculcate contrast ratio for each pixel
     for i = 1:s(1) % loop over x
         for j = 1:s(2) % loop over y
-          pixel_value = (double(image_src(i,j)) - min_value) / (max_value - min_value);                    
+          pixel_value = (double(image_src(i,j)) - min_value) ...
+            / (max_value - min_value);                    
           result(i,j) = pixel_value;
         end
     end

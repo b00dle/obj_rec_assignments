@@ -9,7 +9,7 @@ function image_evaluation(image_path)
   imshow(I);
   subplot(2,1,2);
   imhist(I);
-  %% NOTES TO HISTOGRAM:
+  %% A) b. NOTES TO HISTOGRAM:
   % - spectrum of color values very narrow
   % - mostly values lie between 150 - 215 of intesity 
   % - global maximum is approximately 160
@@ -21,7 +21,7 @@ function image_evaluation(image_path)
   imshow(I_stretched);
   subplot(2,1,2);
   imhist(I_stretched);
-  %% CHANGES NOTED
+  %% A) d. CHANGES NOTED
   % - the spectrum of intensity values has been enhanced
   % - histogram stretched
   % - image now makes full use of possible color encodings
@@ -31,7 +31,7 @@ function image_evaluation(image_path)
   I_bw = ~apply_threshold(I_stretched, 0.35);
   figure('Name', 'bw-mask');
   imshow(I_bw);
-  %% TOWARDS DIFFERENT THRESHOLDS
+  %% B) c. TOWARDS DIFFERENT THRESHOLDS
   % - very low values ([0, 0.1]) tend to convert most features to white
   %   color
   % - very high values ([0.9, 1.0]) convert most features to black color
@@ -61,24 +61,29 @@ function image_evaluation(image_path)
   figure('name', 'erode image');
   imshow(I_bw_erode);
   
-%   % in-built erosion
-%   I_bw_erode_alt = erode_alt(I_bw);
-%   figure(7), imshow(I_bw_erode_alt);
+  % in-built erosion
+  I_bw_erode_alt = erode_alt(I_bw);
+  figure('name', 'in-built erosion'), imshow(I_bw_erode_alt);
 
-%   % in-built dilation
-%   I_bw_dilate_alt = dilate_alt(I_bw);
-%   figure(8), imshow(I_bw_dilate_alt);
+  % in-built dilation
+  I_bw_dilate_alt = dilate_alt(I_bw);
+  figure(8), imshow(I_bw_dilate_alt);
 
   % overlay computation
   I_bw_gray = uint8(I_bw_erode*255);
   I_combined = imadd(I, I_bw_gray);
   figure(9), imshow(I_combined);
   
-  % !!!!!!!!
-  % TODO:
-  % E. Discussion: Are the results satisfactory? What are the limitations
-  % of this approach for separating background and foreground 
-  % (code comments)?!!!!!!!!
+  %% E. Are the results satisfactory? 
+  % Regarding the self written erosion function it is easy to see,
+  % that we have a lot of artifacts in our eroded image.
+  % These artefacts occur in the river and in the city.
+  % Comparing our results to the in-built erosion function we can clearly
+  % see that it sepererated fore- and background with less artifacts.
+  %
+  % What are the limitations of this approach for
+  % separating back- and foreground?
+  % 
   
 end
 

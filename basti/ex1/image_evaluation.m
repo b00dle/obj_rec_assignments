@@ -83,7 +83,11 @@ function image_evaluation(image_path)
   %
   % What are the limitations of this approach for
   % separating back- and foreground?
-  % 
+  % The seperating approach has problems with dark roofs, as they appear in the
+  % same color as the river.
+  % When we try to seperate fore- and background, we do this by defining 
+  % a threshold. When the colors in the fore- and background 'overlap', we will 
+  % have artifacts as a result.
   
 end
 

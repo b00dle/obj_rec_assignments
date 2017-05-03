@@ -72,7 +72,13 @@ function image_evaluation(image_path)
   imshow(difference);
   
   % count the pixel difference
-  diff_num = count_positive_elements
+  diff_num = count_positive_elements(difference);
+  disp(diff_num);
+  
+  %% C.d Are there differences in the results? Why?
+  % Since the self-implemented approach is very naive there area 56307
+  % pixel difference to the matlab implemented functions result. This could
+  % result because of further optimization within matlabs funciton .
   
   
 
@@ -94,7 +100,11 @@ function image_evaluation(image_path)
   %
   % What are the limitations of this approach for
   % separating back- and foreground?
-  % 
+  % The seperating approach has problems with dark roofs, as they appear in the
+  % same color as the river.
+  % When we try to seperate fore- and background, we do this by defining 
+  % a threshold. When the colors in the fore- and background 'overlap', we will 
+  % have artifacts as a result.
   
 end
 
@@ -243,7 +253,7 @@ end
 function count = count_positive_elements(image_src)
   
   % get matrix sizes
-  s = size(matrix_src);
+  s = size(image_src);
 
   % iterate over the matrix and sum up all center-surrounding elements
   res = 0;

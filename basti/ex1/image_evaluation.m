@@ -75,6 +75,14 @@ function image_evaluation(image_path)
   diff_num = count_positive_elements(difference);
   disp(diff_num);
   
+  %% C.d Are there differences in the results? Why?
+  % Since the self-implemented approach is very naive there area 56307
+  % pixel difference to the matlab implemented functions result. This could
+  % result because of further optimization within matlabs function. The
+  % self written function has no variable size of the structuring element
+  % and is fixed to a size of 1 pixel surrounding the current images pixel.
+  % Furthermore the use of just local information could be enhanced in
+  % order to find and eliminate outliers.
   
 
   % in-built dilation

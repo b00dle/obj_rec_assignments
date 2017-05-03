@@ -64,10 +64,22 @@ function image_evaluation(image_path)
   % in-built erosion
   I_bw_erode_alt = erode_alt(I_bw);
   figure('name', 'in-built erosion'), imshow(I_bw_erode_alt);
+  
+  % comparison of built-in erosion and self written by subtracting the
+  % images from each other to get the difference
+  difference = I_bw_erode - I_bw_erode_alt;
+  figure('Name', 'image differences from built-in to self written');
+  imshow(difference);
+  
+  % count the pixel difference
+  diff_num = count_positive_elements(difference);
+  disp(diff_num);
+  
+  
 
   % in-built dilation
-  I_bw_dilate_alt = dilate_alt(I_bw);
-  figure(8), imshow(I_bw_dilate_alt);
+  %   I_bw_dilate_alt = dilate_alt(I_bw);
+  %   figure(8), imshow(I_bw_dilate_alt);
 
   % overlay computation
   I_bw_gray = uint8(I_bw_erode*255);
@@ -194,7 +206,7 @@ end
 % helper function checking the center-pixel surrounding structure element
 function is_valid = check_erode_structuring_element(matrix_src)
 
-  % create vector vom structuring element
+  % get matrix size
   s = size(matrix_src);
 
   % iterate over the matrix and sum up all center-surrounding elements
@@ -227,6 +239,28 @@ function mod_image = erode_alt(image_src)
   % (see https://de.mathworks.com/help/images/ref/imopen.html)
   se = strel('disk', 5, 0);
   mod_image = imerode(image_src, se);
+
+end
+
+%--------------------------------------------------------------------
+
+%count number of positive (1) elements in a matrix
+function count = count_positive_elements(image_src)
+  
+  % get matrix sizes
+  s = size(image_src);
+
+  % iterate over the matrix and sum up all center-surrounding elements
+  res = 0;
+  for r = 1:s(1)
+    for c = 1:s(2)
+      if image_src(r,c) == 1
+        res = res + 1;
+      end
+    end
+  end
+  
+  count = res;
 
 end
 

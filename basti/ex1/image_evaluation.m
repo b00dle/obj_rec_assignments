@@ -1,3 +1,8 @@
+%% Assignment 1 - Image analysis and object recognition
+% Ephraim Schott 110960
+% Hagen Hiller 110514
+% Sebastian Stickert 110882
+
 function image_evaluation(image_path)
   % load image package
 %   pkg load image;
@@ -107,7 +112,8 @@ function image_evaluation(image_path)
   % same color as the river.
   % When we try to seperate fore- and background, we do this by defining 
   % a threshold. When the colors in the fore- and background 'overlap', we will 
-  % have artifacts as a result.
+  % have artifacts as a result. These artifacts could be minimized to some 
+  % degree by eroding and dilationing.
   
 end
 

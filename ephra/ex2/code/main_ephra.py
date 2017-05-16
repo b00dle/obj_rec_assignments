@@ -1,8 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import colorConverter
 from scipy import ndimage
 
+"""
+Assignment 2 - Image analysis and object recognition
+Ephraim Schott 110960
+Hagen Hiller 110514
+Sebastian Stickert 110882
+"""
 
 def main():
     # load the image

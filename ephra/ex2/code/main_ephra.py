@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.colors import colorConverter
 from scipy import ndimage
 
 
@@ -45,11 +46,23 @@ def main():
     mask_combined = mask_round * mask_corner
 
     mask_regio_max = ndimage.filters.maximum_filter(mask_combined, footprint=np.ones((3, 3)))
+    plt.figure(6)
+    plt.title("Task B d) imregionalmax result")
+
+    # imregionalmax is not supported in numpy, we found this as an alternative.
+    # http://stackoverflow.com/questions/27598103/what-is-the-difference-between-imregionalmax-of-matlab-and-scipy-ndimage-filte
+    plt.imshow(mask_regio_max, cmap="Greys_r")
+    msk = (mask_combined == mask_regio_max)
 
     ## TASK B e)
-    plt.figure(6)
+    plt.figure(7)
     plt.title("Task B e) overlay final interest points")
-    plt.imshow(mask_regio_max, cmap="Greys_r")
+
+    masked_data = np.ma.masked_where(msk > 0.1, msk)
+
+    # Overlay the two images
+    plt.imshow(img, cmap="Greys_r")
+    plt.imshow(masked_data, cmap="autumn", interpolation='none')
 
     # show all figures
     plt.show()
@@ -181,7 +194,7 @@ def compute_auto_correlation_matrix(image_x, image_y):
     :param image_y: 
     :return: 
     """
-    w = np.zeros((5,5))
+    w = np.zeros((5, 5))
     ix_2 = image_x ** 2
     ixy = image_x * image_y
     iy_2 = image_y ** 2

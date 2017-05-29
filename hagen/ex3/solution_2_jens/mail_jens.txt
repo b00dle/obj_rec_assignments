@@ -1,0 +1,7 @@
+Moin zusammen,
+
+Anbei die Musterlösung zu Beleg 2 für die Lösung des 3. Blattes.
+Bin mir selbst gar nicht mehr sicher, aber vielleicht hilft noch die Funktion houghpeaks im Anhang....
+
+Viele Grüße
+Jens

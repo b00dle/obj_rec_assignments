@@ -202,7 +202,7 @@ def compute_auto_correlation_matrix(image_x, image_y):
                 once = False
                 #print("============ TEST ========\n > M_2_2"+str(M_2_2))
                 #print(" > M"+str(M))
-    
+
     return auto_cor_mat
 
 def filter_center_value(image_sub_mat, gog_mat):

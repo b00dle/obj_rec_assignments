@@ -155,6 +155,7 @@ end
 % Inputs: Image, sigma
 % Outputs: Filter results in x- and y-direction (GoG_x, GoG_y)
 function [GoG_x, GoG_y] = GoG_filtering(I, sigma)
+    disp("hello");
 
     % get filter masks and radius of filter
     [ filter_x, filter_y, r] = GoG_filter(sigma);

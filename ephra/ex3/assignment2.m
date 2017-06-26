@@ -1,6 +1,6 @@
 
 % sample solution for exercise 2 in the course 
-% "Image Analysis and Object Recognition"
+% 'Image Analysis and Object Recognition'
 
 % Input: An imagefile with one or more channels
 
@@ -29,8 +29,8 @@ function foerstner
 %    subplot(1,2,1); imshow(GoG_x,[]); title('GoG x');
 %    subplot(1,2,2); imshow(GoG_y,[]); title('GoG y');
 %    f = figure('name', 'Autocorrelation components'); 
-%    subplot(1,3,1); imshow(GoG_x.^2,[]); title('Ix�');
-%    subplot(1,3,2); imshow(GoG_y.^2,[]); title('Iy�');
+%    subplot(1,3,1); imshow(GoG_x.^2,[]); title('Ix???');
+%    subplot(1,3,2); imshow(GoG_y.^2,[]); title('Iy???');
 %    subplot(1,3,3); imshow(GoG_y.*GoG_x,[]); title('Iyx');    
     
     Gradient_GoG = sqrt(GoG_x.^2 + GoG_y.^2);
@@ -155,7 +155,6 @@ end
 % Inputs: Image, sigma
 % Outputs: Filter results in x- and y-direction (GoG_x, GoG_y)
 function [GoG_x, GoG_y] = GoG_filtering(I, sigma)
-    disp("hello");
 
     % get filter masks and radius of filter
     [ filter_x, filter_y, r] = GoG_filter(sigma);
@@ -171,7 +170,7 @@ function [GoG_x, GoG_y] = GoG_filtering(I, sigma)
     for i = r+1:(s(1)-r);
         for j = r+1:(s(2)-r);
             
-            % current image "chip"
+            % current image 'chip'
             chip = I(i-r:i+r,j-r:j+r);
             
             % store filter outputs
@@ -191,7 +190,7 @@ function [filter_x, filter_y, r] = GoG_filter(sigma)
     % --- Calculate its size and build filter
     r = round(3*sigma); x_coord = -r:r; y_coord = (-r:r).'; 
     n = numel(x_coord);
-    #n = numberofelements(x_coord);
+    %n = numberofelements(x_coord);
     
     x = repmat(x_coord,n,1);
     y = repmat(y_coord,1,n);

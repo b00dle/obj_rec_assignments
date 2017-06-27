@@ -89,33 +89,26 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
    % x_i - element of training vec
    % alpha - weight?!
 
-   alpha = model.weight(1,:);
-   
-   whos alpha;
-   % sigma = model.covar
-   sigma = model.covar(1,:,:);
-   %whos sigma
-   det_sig = det(squeeze(sigma));
-   %whos det_sig
-   my = model.mean(1,:);
-   whos my;
-   
-   p = trainVect(1,:);
-   %whos p;
-   s = size(alpha)
-   
-   LnVectorProb = zeros(1200,1);
-   %whos LnVectorProb;
-   
-   for k = 1:size(trainVect,1)
-    x = trainVect(k,:);
-    
-    A = (x - my)* inv(squeeze(sigma));
-    result = log(alpha) - 1/2 * (log(det_sig) + A * (x-my)');
-   
-    %LnVectorProb(k,:) = result;
-    LnVectorProb(k,:) = result;
-    
+   n_comp = numel(model.weight);
+   LnVectorProb = zeros(n_comp,1200);
+   for i = 1:n_comp
+     alpha = model.weight(i,:);
+     % whos alpha;
+     sigma = model.covar(i,:,:);
+     % whos sigma
+     det_sig = det(squeeze(sigma));
+     %whos det_sig
+     my = model.mean(i,:);
+     % whos my;
+     
+     for k = 1:size(trainVect,1)
+      x = trainVect(k,:);
+      
+      A = (x - my)* inv(squeeze(sigma));
+      result = log(alpha) - 1/2 * (log(det_sig) + A * (x-my)');
+     
+      LnVectorProb(i,k) = result;
+     end
     
    end
    whos LnVectorProb;
@@ -151,8 +144,8 @@ end
 function LnTotalProb = CalcLnTotalProb(model, trainVect)
     
     % get the current number of components in the model
-    % n_comp = numel(model.weight); 
-    n_comp = numel(model.weight(1,:)); %  Verändert von ephra !!!!!!!!
+    n_comp = numel(model.weight); 
+    %n_comp = numel(model.weight(1,:)); %  Verändert von ephra !!!!!!!!
 
     % logarithmic probability for all vectors in all components
     LnVectorProb = CalcLnVectorProb(model, trainVect);

@@ -21,6 +21,7 @@ function model = LearnGaussMixModel(trainVect, n_comp)
     % initialization of the model using a structure
     % at the starting point the algorithm will always be initialized with 
     % one cluster 
+    whos trainVect
     model.weight(1,:)=1;
     model.mean=[0,0,0];
     model.covar(1,:,:)=[1 0 0; 0 1 0; 0 0 1];
@@ -78,7 +79,6 @@ end
 %--------------------------------------------------------------------------
 % logarithmic probability of all vectors for all components
 function LnVectorProb = CalcLnVectorProb(model, trainVect)
-   printf('HELLLO');
    % IMPLEMENT THIS FUNCTION (TASK A.a)
    % c   - number of clusters ?!
    % k   - ???
@@ -89,18 +89,38 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
    % x_i - element of training vec
    % alpha - weight?!
 
-   alpha = model.weight;
+   alpha = model.weight(1,:);
+   
+   whos alpha;
    % sigma = model.covar
-   sigma = model.covar(1,:,:)
+   sigma = model.covar(1,:,:);
+   %whos sigma
+   det_sig = det(squeeze(sigma));
+   %whos det_sig
+   my = model.mean(1,:);
+   whos my;
    
-   det_sig = det(squeeze(sigma))
-   my = model.mean;
-   A = (trainVect - my)';
-   whos A
+   p = trainVect(1,:);
+   %whos p;
+   s = size(alpha)
    
-   result = log(alpha) - 1/2 * (log(det_sig) + (trainVect - my)' * inv(squeeze(sigma)) * (trainVect - my))
-  
+   LnVectorProb = zeros(1200,1);
+   %whos LnVectorProb;
+   
+   for k = 1:size(trainVect,1)
+    x = trainVect(k,:);
+    
+    A = (x - my)* inv(squeeze(sigma));
+    result = log(alpha) - 1/2 * (log(det_sig) + A * (x-my)');
+   
+    %LnVectorProb(k,:) = result;
+    LnVectorProb(k,:) = result;
+    
+    
+   end
+   whos LnVectorProb;
 
+   
 end
 
 %--------------------------------------------------------------------------
@@ -131,7 +151,8 @@ end
 function LnTotalProb = CalcLnTotalProb(model, trainVect)
     
     % get the current number of components in the model
-    n_comp = numel(model.weight);
+    % n_comp = numel(model.weight); 
+    n_comp = numel(model.weight(1,:)); %  Verändert von ephra !!!!!!!!
 
     % logarithmic probability for all vectors in all components
     LnVectorProb = CalcLnVectorProb(model, trainVect);
@@ -283,6 +304,6 @@ function NewModel = InitNewComponent(model, trainVect)
 
     % store new parameters in model
     NewModel.weight = newWeight;
-    NewModel.mean = newMean;
+    NewModel.mean = newMean
     NewModel.covar = newCovar;
 end

@@ -11,7 +11,7 @@ function ApplyGaussMixEM
     % number of desired components (clusters)
     % vary this parameter to find an appropriate value for the input
     % image (Task )!!!
-    n_comp = 2;
+    n_comp = 8;
     %--------------------------------------------------------------------------
     
     % reshaping of vectors for input of EM
@@ -45,8 +45,44 @@ end
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
-% PASTE HERE YOUR IMPLEMENTED FUNCTION CalcLnVectorProb (TASK B.a)
 %--------------------------------------------------------------------------
+% logarithmic probability of all vectors for all components
+function LnVectorProb = CalcLnVectorProb(model, trainVect)
+   % IMPLEMENT THIS FUNCTION (TASK A.a)
+   % c   - number of clusters ?!
+   % k   - ???
+   % ??   - mean vector
+   % sigma   - covariance matrix
+   % |sigma| - det(covar matrix)
+   % sigma-1 - inverse of covariance matrix
+   % x_i - element of training vec
+   % alpha - weight?!
+
+   n_comp = numel(model.weight);
+   LnVectorProb = zeros(n_comp,size(trainVect, 1));
+   for i = 1:n_comp
+     alpha = model.weight(i,:);
+     % whos alpha;
+     sigma = model.covar(i,:,:);
+     % whos sigma
+     det_sig = det(squeeze(sigma));
+     %whos det_sig
+     my = model.mean(i,:);
+     whos model.mean
+     
+     for k = 1:size(trainVect,1)
+      x = trainVect(k,:);
+      
+      A = (x - my)* inv(squeeze(sigma));
+      result = log(alpha) - 1/2 * (log(det_sig) + A * (x-my)');
+     
+      LnVectorProb(i,k) = result;
+     end
+    
+   end
+   whos LnVectorProb;
+   
+end%--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 %--------------------------------------------------------------------------
 

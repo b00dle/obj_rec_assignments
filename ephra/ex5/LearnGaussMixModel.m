@@ -82,7 +82,7 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
    % IMPLEMENT THIS FUNCTION (TASK A.a)
    % c   - number of clusters ?!
    % k   - ???
-   % µ   - mean vector
+   % ??   - mean vector
    % sigma   - covariance matrix
    % |sigma| - det(covar matrix)
    % sigma-1 - inverse of covariance matrix
@@ -90,7 +90,7 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
    % alpha - weight?!
 
    n_comp = numel(model.weight);
-   LnVectorProb = zeros(n_comp,1200);
+   LnVectorProb = zeros(n_comp,size(trainVect, 1));
    for i = 1:n_comp
      alpha = model.weight(i,:);
      % whos alpha;
@@ -99,7 +99,7 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
      det_sig = det(squeeze(sigma));
      %whos det_sig
      my = model.mean(i,:);
-     % whos my;
+     whos model.mean
      
      for k = 1:size(trainVect,1)
       x = trainVect(k,:);
@@ -112,7 +112,6 @@ function LnVectorProb = CalcLnVectorProb(model, trainVect)
     
    end
    whos LnVectorProb;
-
    
 end
 
@@ -122,8 +121,16 @@ end
 % components using the current model parameters
 function LnCompProb = GmmEStep(model, trainVect)
 
-% IMPLEMENT THIS FUNCTION (TASK A.b)
+  n_comp = numel(model.weight);
+  M = CalcLnVectorProb(model, trainVect);
 
+  s = zeros(1, size(trainVect, 1));
+  s = sum(M,1);
+
+  LnCompProb = zeros(n_comp, size(trainVect, 1));
+  for i = 1:n_comp
+    LnCompProb(i,:) = M(i,:) / s;
+  end
 
 end
 
@@ -132,9 +139,46 @@ end
 % Estimation of new model parameters according the calculated probabilities
 % of the E-Step
 function model = GmmMStep(model, trainVect, LnCompProb)
-    
-% IMPLEMENT THIS FUNCTION (TASK A.c)
 
+  n_comp = numel(model.weight);
+
+  num_p_in_c = exp(LnCompProb);
+
+  N     = zeros(1,n_comp);
+  alpha = zeros(1,n_comp);
+  my    = zeros(1,3);
+  sigma = zeros(3,3);
+
+  % for each cluster eat a banana and drink some pee
+  for i = 1:n_comp
+    
+    % set number of feature points
+    N(1,i) = sum(num_p_in_c,2);
+    
+    % new weight
+    alpha(1,i) = N(1,i) / size(trainVect,1);
+
+    % calculate new mean vecs
+    for j = 1:size(trainVect,1)
+      rgb = trainVect(j,:);
+      my(i,:) = my(i,:) + rgb * num_p_in_c(i, j);
+    end
+    my(i,:) = 1 / N(1,i) * my(i,:);
+
+    % covar calc
+    for j = 1:size(trainVect,1)
+      rgb = trainVect(j,:);
+      sigma(i,:) = (rgb - my(i,:)) * (rgb - my(i,:))' * num_p_in_c(i, j);
+    end
+    sigma(i,:) = 1 / N(1,i) * sigma(i,:);
+  
+    % set new model
+    model.weight(i,:) = alpha;
+    model.mean(i,:)=my;
+    model.covar(i,:,:) = sigma;
+
+  end
+  
 
 end
 
@@ -145,7 +189,7 @@ function LnTotalProb = CalcLnTotalProb(model, trainVect)
     
     % get the current number of components in the model
     n_comp = numel(model.weight); 
-    %n_comp = numel(model.weight(1,:)); %  Verändert von ephra !!!!!!!!
+    %n_comp = numel(model.weight(1,:)); %  Ver??ndert von ephra !!!!!!!!
 
     % logarithmic probability for all vectors in all components
     LnVectorProb = CalcLnVectorProb(model, trainVect);
